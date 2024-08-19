@@ -1,0 +1,29 @@
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\begin{algorithm}
+\caption{Continous Single-Proposal Deal-Agreement-Based Algorithm}\label{alg:DAB}
+\begin{algorithmic}[1]
+\Require An undirected graph $G=(V,E,load)$
+\Ensure A load state with discrepancy at most $\epsilon$ on $G$
+\For{$r=1$ and on}
+\For{every node u}
+\State Find a neighbor, $v$, with the minimal load
+\If{$load_{r}(u) - load_{r}(v)>0$}
+\State $u$ sends to $v$ a transfer proposal of value $(load_{r}(u)-load_{r}(v))/2$
+\EndIf
+\EndFor
+
+\For{every node $u$}
+\If{there is at least one transfer proposal to $u$}
+\State Find a neighbor, $w$, proposing to $u$ the maximal transfer
+\State Node $u$ makes a deal: informs node $w$ on accepting its proposal
+\State The actual transfer from $w$ to $u$ is executed 
+\EndIf
+\EndFor
+
+\For{every node $u$}
+\State Node $u$ sends the updated value of its load to its neighbors
+\EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}

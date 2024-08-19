@@ -1,0 +1,7 @@
+\begin{tikzpicture}
+    \node[draw, fill=blue, circle] (center) at (0, 0) {};
+    \foreach \i in {1,...,15} {
+            \node[draw, fill=blue, circle] (n\i) at ({360/15 * (\i-1)}:4) {};
+            \draw (center) -- (n\i);
+        }
+\end{tikzpicture}

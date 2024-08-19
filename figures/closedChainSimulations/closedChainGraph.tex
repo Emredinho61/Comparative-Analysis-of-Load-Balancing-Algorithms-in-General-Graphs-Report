@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+    \foreach \i in {1,...,16} {
+      \node[draw, fill=blue, circle, minimum size=6pt] (v\i) at (\i, 0) {};
+    }
+    
+    \foreach \i in {1,...,15} {
+      \pgfmathtruncatemacro{\j}{\i+1}
+      \draw (v\i) -- (v\j);
+    }
+    
+    \draw[bend left=45] (v1) to (v16);
+  
+  \end{tikzpicture}

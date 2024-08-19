@@ -1,0 +1,22 @@
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\begin{algorithm}
+\caption{Push-Pull Sum Algorithm}\label{alg:PPS}
+\begin{algorithmic}[1]
+\Procedure{RequestData}{}
+\State Chose a random neighbor node $v$
+\State Send $(\frac{s_{u,t}}{2}, \frac{w_{u,t}}{2})$ to the chosen node $v$ and the node $u$ itself
+\EndProcedure
+\Procedure{ResponseData}{}
+\State $R_{u,t} \leftarrow$ Set of the nodes calling $u$ at a round $t$
+\For{\textbf{all} $i \in R_{u,t}$}
+\State Reply to i with $\left( \frac{\frac{s_{u,t}}{2}}{|R_{u,t}|}, \frac{\frac{w_{u,t}}{2}}{|R_{u,t}|} \right)$
+\EndFor
+\EndProcedure
+\Procedure{Aggregate}{}
+\State $M_{u,t} \leftarrow \{(s_{m}, w_{m})\}$ messages sent to $u$ at a round $t-1$
+\State $s_{u,t} \leftarrow \sum_{m \in M_{u,t}}^{}s_{m}, w_{u,t} \leftarrow\sum_{m \in M_{u,t}}^{}w_{m}$
+\State $f_{avg} \leftarrow \frac{s_{u,t}}{w_{u,t}}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
