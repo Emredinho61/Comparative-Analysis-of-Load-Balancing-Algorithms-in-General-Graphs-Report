@@ -4,7 +4,7 @@ The graph is a so-called \textit{log-log graph}, meaning that we have logarithmi
 
 \section{Complete Graphs}
 \textbf{The Complete graph}: The complete graph as depicted in \hyperref[fig:completegraphDemo]{figure} \ref{fig:completegraphDemo} is a graph where each pair of distinct nodes is connected by an edge. The complete graph contains of $n$ nodes and $\frac{n\times(n-1)}{2}$ edges. Every node has a degree of $n-1$, since each node is connected to every other node except to itself \cite{GraphTheorySchindelhaauer2021}. The complete graph is a dense graph, since it has the maximal amount of edges for a given number of nodes.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \input{figures/completeGraphSimulations/completegraph.tex}
     \caption{Complete graph: network size 16}
@@ -12,7 +12,7 @@ The graph is a so-called \textit{log-log graph}, meaning that we have logarithmi
 \end{figure}
 \subsection{Network Size 2\textsuperscript{4}}
 \textbf{Analysis}: The plot of figure \ref{fig:16CompleteGraph} indicates that the MSE of the network balanced by the DAB algorithm does not initially fall as significantly compared to the PPS. In round 29, the MSE suddenly manages to reduce the error of the network to 0. An MSE of 0 suggests a balanced network. All nodes have the same load. This is exactly the state we are aiming for. Despite the initially steeper downward slope of the PPS graph, the DAB ultimately manages to balance the graph more quickly. The remaining simulation showed that in some cases the DAB protocol reduces the error of the network faster, however there are cases like in the \hyperref[chap:appendix]{Appendix} where the PPS performs better for small network sizes. \\
-The number of edges for a network size of 16 is 120. The PPS chooses its load transfer by random. For the PPS each load transfer step involves a push and a pull operation. For a small network size the PPS cannot already exploit the high connectivity of the graph. With increasing network change the PPS will perform better as we see. On the other hand, it is possible for the DAB algorithm to fully balance the network within 50 rounds, since each load transfer involves the maximal possible fair load. \\
+The number of edges for a network size of 16 is 120. The PPS chooses its load transfer by random. For the PPS each load transfer step involves a push and a pull operation. For a small network size the PPS cannot already exploit the high connectivity of the graph. With increasing network change the PPS will perform better as we see. On the other hand, it is possible for the DAB algorithm to fully balance the network within 50 rounds, since each load transfer involves the maximal possible fair load. A larger network size, means more edges, which results in more messages being sent trough the network, triggering a faster decrease of the MSE \cite{nugroho2023PushPullSumDataAg}. \\
 \textbf{Winner}: DAB/PPS\\
 \begin{figure}[H]
     \centering
@@ -47,7 +47,7 @@ The number of edges for a network size of 16 is 120. The PPS chooses its load tr
 
 \section{Star Graph}
 \textbf{The star graph}: A star graph as depicted in \hyperref[fig:stargraphDemo]{figure} \ref{fig:stargraphDemo} is a complete bipartite graph \cite{west2001introduction}. A graph is characterized as bipartite graph, if the set of graph edges is the union of two disjoint independent sets \cite{GraphTheorySchindelhaauer2021}. The central node is part of one set, while the remaining outer nodes are part of another set. A star with $n$ nodes has $n-1$ edges. The degree of every node is 1, except for one node, which has the degree of $n-1$. The diameter of a star graph is 2.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \input{figures/starGraphSimulations/star.tex}
     \caption{Star graph: network size 16}
@@ -86,14 +86,14 @@ The number of edges for a network size of 16 is 120. The PPS chooses its load tr
 
 \section{Closed Chain Graph}
 \textbf{The closed chain graph}: A closed chain graph (or also refered to as closed path graph) is a regular graph where each node has a degree of two. A chain graph can be drawn so that all of its vertices and edges lie on a single straight line \cite{gross1998graph}. For a closed chain graph, the first and the last node are also connected as depicted in \hyperref[fig:closedChainGraphDemo]{figure } \ref{fig:closedChainGraphDemo}. Furthermore, a closed chain graph has $n$ edges.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \scalebox{0.8}{\input{figures/closedChainSimulations/closedChainGraph.tex}}
     \caption{Closed chain graph: network size 16}
     \label{fig:closedChainGraphDemo}
 \end{figure}
 \subsection{Network sizes 2\textsuperscript{4}, 2\textsuperscript{8}, 2\textsuperscript{12} and 2\textsuperscript{14}}
-\textbf{Analysis}:  \\
+\textbf{Analysis}: For a network size of $2^{4}$ DAB reduces the error faster than PPS within 50 rounds. What is interesting is that the graphs almost touch each other in the 8th round. The MSE of the PPS is around 49.41 at the end of the 8th round and the MSE of the DAB balanced graph is 48.02. In the following rounds, the DAB increases its distance again. Especially from the 10th round onwards, the difference in the MSE for the two graphs increases. In the end, the network balanced by the DAB has an MSE of around 0.07, while the PPS ends up with a result of 0.36. For comparison, for the network size $2^{14}$ the MSE of the PPS is balanced at about 43.72 at the end of the 50th round and the MSE of the DAB at 34.88. Also, you do not see such a curve shape as for the network size $2^{4}$ for the other network sizes. One possible explanation for the fact that the DAB performs better than the PPS is that the closed chain graph has a degree of 2 for each node. This means that exactly 2 partners are possible for each load transfer. With the PPS protocol, a node will also perform a push operation if the randomly selected trading partner has a higher load. Assume that both neighbouring nodes have a slightly higher load than the node under consideration. If both nodes now select the node under consideration, the load transfer results in a local deterioration of the MSE for this neighbourhood. If this happens for several neighbouring nodes, there is even a deterioration in the global MSE for the network. Such a load transfer is excluded for the DAB. A load transfer in the DAB protocol is conditional. That is the main advantage we observe for the DAB over the PPS protocol. \\
 \textbf{Winner}: DAB\\
 \begin{figure}[H]
     \centering
@@ -124,27 +124,164 @@ The number of edges for a network size of 16 is 120. The PPS chooses its load tr
 \end{figure}
 
 \section{Torus Grid Graph}
-\begin{figure}
+\textbf{The torus grid graph}: A two-dimensional torus grid graph (or sometimes solely refered to as torus) is a two-dimensional mesh with wrap around edges as depicted in \hyperref[fig:torusGraph]{figure} \ref{fig:torusGraph} \cite{Mahlmann2010}. A torus with $m \times n$ nodes where $m$ denotes the height and $n$ denotes the width, has $2\times m \times n$ edges. Worth notinig, is that the torus is a regular graph, where every node has a degree of 4.
+
+\begin{figure}[H]
     \centering
     \scalebox{1.5}{\input{figures/torusGridGraphSimulations/torus.tex}}
     \caption{Torus grid graph: network size 16}
-    \label{fig:torusGraphDemo}
+    \label{fig:torusGraph}
 \end{figure}
-\textbf{The torus grid graph}: \cite{PasdeloupTranslationOnGraphs2017}.
+
+\subsection{Network sizes: 2\textsuperscript{4}, 2\textsuperscript{8}, 2\textsuperscript{12}}
+\textbf{Analysis}: For the network sizes $2^{4}$, $2^{8}$ and $2^{12}$ the DAB protocol performs better than the PPS protocol, eventhough for larger getting network sizes, the difference in the MSE for the networks at the end of the round is getting increasingly smaller. For a network size of $2^{4}$ the DAB was actually able to balance the whole network after round 17. The MSE decreases to zero, perfectly balancing the network. The PPS also perfoms good, reducing the error to approximately $6.68E-15$ after round 50. For the network size $2^{8}$ the error for the DAB drops down to nearly $0.04$ after round 50, while the error for the PPS balanced graph is decreased to $1.5$. The difference is not so big for the simulation of network size $2^{12}$. The error for the DAB balanced network is as low as $1.66$ while the error for the PPS balanced network is at around $3.59$. This observation can be explained by the fact that nodes in the torus graph always have exactly 4 neighbours (due to the regularity of the graph). This is a relatively low connectivity (e.g. compared to the complete graph), thus increasing the chance that the PPS algorithm does not find an optimal trading partner by randomly picking the partner and thus increasing the local error. For graphs with lower connectivity, the more controlled and conditional distribution of the DAB protocol proves to be more efficient.\\
+\textbf{Winner}: DAB \\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/torusGridGraphSimulations/DAB_vs_PPS_TG_r50_n16.png}
+    \caption{Torus grid graph: network size $2^{4}$}
+    \label{fig:16torusGraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/torusGridGraphSimulations/DAB_vs_PPS_TG_r50_n256.png}
+    \caption{Torus grid graph: network size $2^{8}$}
+    \label{fig:256torusGraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/torusGridGraphSimulations/DAB_vs_PPS_TG_r50_n4096.png}
+    \caption{Torus grid graph: network size $2^{12}$}
+    \label{fig:4096torusGraph}
+\end{figure}
+
+\subsection{Network Sizes 2\textsuperscript{14}}
+\todo{evtl. Bilder orientierung zu [h] ändern.}
+\textbf{Analysis}: For the network size $2^{14}$ we conducted three different simulations. Namely, a $2^{7} \times 2^{7}$ torus graph, a $2^{5} \times 2^{9}$ and $2^{9} \times 2^{5}$. Goal was to demonstrate that different constellations of width and height values do not change the behaviour of the graphs. Many load balancing protocols operate based on local information, such as the state of neighboring nodes. In a torus grid, the local neighborhood of each node remains consistent because the structure is highly regular and symmetric. This consistency means that the protocol's behavior will be largely independent of the overall size of the graph as long as the local neighborhood does not change significantly. By changing the width and height, at most one neighbor changes for each node, which is the neighbor that is connected per the wraparound edge.That is the reason why altering width and height of a torus grraph does not alter the behavior of the protocols. The DAB performs better than the PPS for all three variations of the given network size. \\
+\textbf{Winner}: DAB;
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/torusGridGraphSimulations/128x128/DAB_vs_PPS_TG_r50_n16384.png}
+    \caption{Torus grid graph: network size $2^{14}$ $(128\times128)$}
+    \label{fig:16384torusGraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/torusGridGraphSimulations/32x512/DAB_vs_PPS_TG_r50_n16384.png}
+    \caption{Torus grid graph: network size $2^{14}$ $(32\times512)$}
+    \label{fig:16384torusGraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/torusGridGraphSimulations/512x32/DAB_vs_PPS_TG_r50_n16384.png}
+    \caption{Torus grid graph: network size $2^{14}$ $(512\times32)$}
+    \label{fig:16384torusGraph}
+\end{figure}
+
 \section{Ring of Cliques}
-\textbf{The ring of cliques}: \cite{Mahlmann2010}
-\begin{figure}
+\textbf{The ring of cliques}: A $m \times n$ ring of cliques, consits of $m$ cliques where each clique has $n$ nodes. These cliques are connected to form a ring, where one edge from every clique is removed and the endpoints of the removed edges are connected, in order to form a regular graph \cite{Mahlmann2010}. A $m \times n$ ring of cliques has $\left( m\times \left(\frac{n\times (n - 1)}{2}-1 \right) \right) +m$ edges. The connectivity decreases with a lower clique size and vice versa.
+\begin{figure}[H]
     \centering
     \scalebox{1}{\input{figures/ringOfCliquesSimulations/ringofcliques.tex}}
     \caption{Ring of cliques: network size 16}
     \label{fig:ringofcliquesDemo}
 \end{figure}
 
+\subsection{Network sizes: 2\textsuperscript{4}, 2\textsuperscript{8} and 2\textsuperscript{12}}
+\textbf{Analysis}: For a $4\times4$ ring of clique the DAB protocol outperforms the PPS protocol. Right off the beginning the DAB state of the network faster than the PPS protocol. This is due to the fact that a smaller network size implies a smaller connectivity of the network. The chosen clique size is for. Each node has therefor a degree of 3, as depicted in \hyperref[fig:ringofcliquesDemo]{figure} \ref{fig:ringofcliquesDemo}. For smaller connectivity we observed that the DAB usually performs better than the PPS protocol. With increasing clique size the PPS catches up to the DAB protocol as seen in \hyperref[fig:256ringOfCliques]{figures} \ref{fig:256ringOfCliques} and \ref{fig:4096ringOfCliques}. For a $16\times16$ ring of clique the PPS protocol starts off faster, reducing the error faster, however after round 9 the DAB protocol catches up to the PPS protocol and proceeds to reduce the error of the error faster. In round 50 the DAB balanced network has an error of $14.31$ while the PPS balanced network has an error of $46.81$. A similar observation can be made for the simulation for the $64 \times 64$ ring of cliques \ref{fig:4096ringOfCliques}. Again, the DAB catches up to the PPS protocol, resulting in a lower error of the network in round 50. However, the final errors at round 50 are closer to each other. The explanation for this is that a larger clique size was chosen for this simulation, and thus the connectivity of the graph has increased. With an increased network size and especially with a larger clique size, the MSE decreases faster, as this results in more messages being sent in the network \cite{nugroho2023PushPullSumDataAg}. \\
+\textbf{Winner}: DAB \\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/ringOfCliquesSimulations/DAB_vs_PPS_RoC_r50_n16.png}
+    \caption{Ring of cliques: network size $2^{4}$ $(4\times4)$}
+    \label{fig:16ringOfCliques}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/ringOfCliquesSimulations/DAB_vs_PPS_RoC_r50_n256.png}
+    \caption{Ring of cliques: network size $2^{8}$ $(16\times16)$}
+    \label{fig:256ringOfCliques}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/ringOfCliquesSimulations/DAB_vs_PPS_RoC_r50_n4096.png}
+    \caption{Ring of cliques: network size $2^{12}$ $(64\times64)$}
+    \label{fig:4096ringOfCliques}
+\end{figure}
+
+\subsection{Network size: 2\textsuperscript{14}}
+\textbf{Analysis}: For a ring of cliques with 128 cliques, each with 128 nodes \ref{fig:128x128ringOfCliques}, the PPS protocol is faster at reducing errors than the DAB protocol. As described for the smaller network sizes, the clique size makes a big difference. Now the clique size is so large that the PPS protocol can take advantage of it so much that it reduces the error faster than the DAB protocol.This becomes very clear with the composition of the network of $32 \times 512$, i.e. 32 cliques each with 512 nodes \ref{fig:32x512ringOfCliques}. Previously, the DAB protocol managed to reduce the MSE of the network to $22.99$ by the 50th round; with a clique size of 512, the MSE of the network in the 50th round is now $443.68$. Meanwhile, the error of the network with the PPS protocol decreased from $6.49$ to $2.27$. For the $512 \times 32$ (512 cliques with clique size of 32 each) ring of cliques, the DAB protocol now balances again faster than the PPS protocol. In the 20th round, the MSE of the DAB balanced network falls below that of the PPS balanced network. Two observations are interesting here:
+1. the MSE of the PPS balanced network is now higher than the MSE of the PPS balanced network for the other two simulations with network size of $2^{14}$. The MSE of the PPS balanced network in the 50th round is now $21.79$
+2. the MSE of the DAB balanced network is now much lower than the MSE of the DAB balanced network for the other two simulations with network size $2^{14}$. The MSE of the PPS balanced network in the 50th round is now $11.67$.\\
+\textbf{Winner}: $128\times128$: PPS; \\
+$32\times512$: PPS; \\
+$512\times32$: DAB;
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/ringOfCliquesSimulations/128x128/DAB_vs_PPS_RoC_r50_n16384.png}
+    \caption{Ring of cliques: network size $2^{14}$ $(128\times128)$}
+    \label{fig:128x128ringOfCliques}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/ringOfCliquesSimulations/32x512/DAB_vs_PPS_RoC_r50_n16384.png}
+    \caption{Ring of cliques: network size $2^{14}$ $(32\times512)$}
+    \label{fig:32x512ringOfCliques}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/ringOfCliquesSimulations/512x32/DAB_vs_PPS_RoC_r50_n16384.png}
+    \caption{Ring of cliques: network size $2^{14}$ $(512\times32)$}
+    \label{fig:512x32ringOfCliques}
+\end{figure}
+
 \section{Lollipop Graph}
-\textbf{The lollipop graph}: \cite{JonassonLollipopGraphs2000}
-\begin{figure}
+\textbf{The lollipop graph}: A lollipop graph as described in the paper \cite{JonassonLollipopGraphs2000} is a graph that consists of a complete graph and a path graph which are connected by a single node as depicted in \hyperref[fig:lollipopgraphDemo]{figure} \ref{fig:lollipopgraphDemo}. We define a $(m, n)$-Lollipop graph composed of a complete graph with $m$ nodes and a path size of $n$ nodes. So, a lollipop graph has $m+n$ nodes and $\binom{m}{n}+n$ edges.
+\begin{figure}[H]
     \centering
     \scalebox{1}{\input{figures/lollipopGraphSimulations/lollipopgraph.tex}}
     \caption{Lollipop graph: network size 16}
     \label{fig:lollipopgraphDemo}
 \end{figure}
+
+\subsection{Network sizes: 2\textsuperscript{4}, 2\textsuperscript{8} and 2\textsuperscript{12}}
+\textbf{Analysis}: For the $(8, 8)$-Lollipop graph the DAB protocol has a slight advantage over the PPS protocol. In the $(128, 128)$-Lollipop graph this changes. The PPS protocol now has a slight advantage over the DAB protocol. The DAB protocol starts off poorly, however recovers in the 10th round and reduces the differences in errors between the both protocols heavily. In the 12th round the MSE of the DAB protocol balanced network is at $232.13$ while for the PPS network the MSE is at $38.81$. In round 30, however, the DAB balanced network is at $68.36$ and for the PPS network we have $16.66$. Finally, in the 50th round we observe an MSE for DAB managed network of $15.20$ and for PPS managed network a MSE of $11.69$. The differences in MSE at round 50 increase with larger complete graphs (larger in terms of nodes assigned to the complete graph). Such an observation can be made for the $(2048, 2048)$-Lollipop graph. The MSE in the 50th round for the both networks vary a lot more than in the examples beforehand. While the MSE of the PPS managed network is around $20$ the MSE of the DAB managed graph is at around $378$, implying the inability of the DAB protocol to handle large network sizes with high connectivity as efficiently as the PPS protocol. This observation is already made for the complete graph and the ring of cliques with large clique sizes. \\
+\textbf{Winner}: $(8, 8)$: DAB; \\
+$(128, 128)$: PPS; \\
+$(2048, 2048)$: PPS;
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/lollipopGraphSimulations/DAB_vs_PPS_LG_r50_n16.png}
+    \caption{Lollipop graph: network size $2^{4}$ $(8, 8)$}
+    \label{fig:8+8lollipop}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/lollipopGraphSimulations/DAB_vs_PPS_LG_r50_n256.png}
+    \caption{Lollipop graph: network size $2^{8}$ $(128, 128)$}
+    \label{fig:128+128lollipop}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.5]{figures/lollipopGraphSimulations/DAB_vs_PPS_LG_r50_n4096.png}
+    \caption{Lollipop graph: network size $2^{12}$ $(2048, 2048)$}
+    \label{fig:2048+2048lollipop}
+\end{figure}
+
+Note: For the lollipop graph no simulations for the network size $2^{14}$ were conducted, since it took to long and I always take the best simulation of multiple runs. This would have taken too long.
+
+\section{Overview}
