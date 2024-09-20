@@ -1,40 +1,40 @@
 \chapter{Algorithms and Concepts}\label{chap:background}
 \input{pseudoalgorithms.tex/DAB}
 \input{pseudoalgorithms.tex/PPS}
-Simulations in this project were conducted with network sizes of up to $2^{14}$ nodes. Consequently, we required a simulation tool capable of handling such such large network sizes for different topologies (also topologies with high connectivity, meaning a high number of edges in the graph). We selected PeerSim, a Java-based simulation tool, as it meets these requirements. PeerSim offers two simulation models: the cycle-driven model and the event-driven model. We chose the cycle-driven model to compute the simulations for both algorithms, since both algorithms work in rounds.
+Simulations in this project were conducted with network sizes of up to $2^{14}$ nodes. Consequently, we required a simulation tool capable of handling such large network sizes for different topologies (also topologies with high connectivity, meaning a high number of edges in the graph). We selected PeerSim, a Java-based simulation tool, as it meets these requirements. PeerSim offers two simulation engines: the cycle-driven engine and the event-driven engine. We chose the cycle-driven model to compute the simulations for both protocols, since both protocols work in rounds.
 
 \section{Setting}
-Each simulation is run for 50 rounds. We use the continuous versions of the algorithms, allowing any load, not just integers, to be transferred across the edges. At the beginning of the simulations, the nodes are provided with the information of their own loads and a set of neighboring nodes (this is the input in the algorithm). Load transfers can only happen in between rounds. The initial loads are uniformly distributed between 0 and 100. For each round of a simulation the mean squared error is computed. Both algorithms are \textit{synchronous}, meaning that load transfers happen in a constant time. Different topologies are chosen. Simulations are conducted for following topologies:
+Each simulation is run for 50 rounds. We use the \textit{continuous} versions of the protocols, allowing any load, not just integers, to be transferred across the edges. At the beginning of the simulations, the nodes are provided with the information of their own loads and a set of neighboring nodes (this is the input in the protocols). Load transfers can only happen in between rounds. The initial loads are uniformly distributed between 0 and 100. For each round of a simulation the mean squared error is computed. Both protocols are \textit{synchronous}, meaning that load transfers happen in a constant time. Different topologies are chosen. Simulations are conducted for following topologies:
 \begin{itemize}
-    \item Complete graph
-    \item Star graph
-    \item Closed Chain graph
-    \item Torus grid graph
-    \item Regular Ring of Cliques
-    \item Lollipop graph
+    \item complete graph
+    \item star graph
+    \item closed chain graph
+    \item torus grid graph
+    \item ring of cliques
+    \item lollipop graph
 \end{itemize}
 These topologies have different properties, which lead to different simulation outcomes. For instance, the complete graph and the lollipop graph are characterized by high connectivity, which impacts the number of load transfers per round. Among the listed graphs there are also regular graphs, such as the ring of cliques, the torus grid graph, the closed chain graph or the complete graph for which the simulation of different network sizes is interesting, in order to investigate how this influences the outcomes.
 
 \input{Tables/simulationoverview}
 
-\section{Deal-Agreement-Based Algorithm}
-Algorithm \ref{alg:DAB} illustrates the continuous version of the load balancing protocol proposed in the paper by Dinitz et al. \cite{dinitz2022localDealAgreementloadBalancing}. This algorithm is divided into three phases, namely the "proposal"-phase, the "deal"-phase and the "summary"-phase.
+\section{Deal-Agreement-Based Protocol}
+Algorithm \ref{alg:DAB} illustrates the continuous version of the load balancing protocol proposed in the paper by Dinitz et al. \cite{dinitz2022localDealAgreementloadBalancing}. This protocol is divided into three phases, namely the "proposal"-phase, the "deal"-phase and the "summary"-phase.
 \begin{itemize}
-    \item \textbf{Proposal-phase}: In this phase every node is instructed to propose a \textit{fair} proposal to its neighbor with the minimal load. A proposal from node $u$ to node $v$ in round $r$ is considered fair if the proposed transfer amount $l$ satisfies $l \leq \frac{load_{r}(u) - load_{r}(v)}{2}$.
-    \item \textbf{Deal-phase}: Now, the nodes evaluate the proposal and accept the load transfer with the maximal proposing node.
-    \item \textbf{Summary-phase} This is the last phase. The nodes inform their neighbors about their new updated values after the load transfer happened.
+    \item \textbf{Proposal}: In this phase every node is instructed to propose a \textit{fair} proposal to its neighbor with the minimal load. A proposal from node $u$ to node $v$ in round $r$ is considered fair if the proposed transfer amount $l$ satisfies $l \leq \frac{load_{r}(u) - load_{r}(v)}{2}$.
+    \item \textbf{Deal}: Now, the nodes evaluate the proposal and accept the load transfer with the maximal proposing node.
+    \item \textbf{Summary} This is the last phase. The nodes inform their neighbors about their updated values after the load transfer happened.
 \end{itemize}
-This approach is a deterministic algorithm, there is no element of random involved. We need to keep this in mind when looking into the simulations later on in chapter \ref{chap:simulations}, as achieving good results with deterministic approaches can often be more challenging compared to randomized ones. Additionally, this algorithm is considered an \textit{anytime} algorithm. We could therefore stop the simulation at any time, regardless of the initial state of the network, and the state of the network would not worsen at any step of the simulation. \todo{Maybe two or three sentenced regarding the time boundaries?}. The algorithm \ref{alg:DAB} is designed to produce a "load state with discrepancy at most $\epsilon$ on $G$," where $\epsilon$ represents an arbitrarily small bound on the final discrepancy \cite{dinitz2022localDealAgreementloadBalancing}. The discrepancy is the difference between the maximum load and the minimum load of the network. As initial information this algorithm takes in a undirected graph $G$ with all the nodes, edges (interconnection of the nodes) and their respective loads.
+This approach is a deterministic approach, there is no element of random involved. We need to keep this in mind when looking into the simulations later on in chapter \ref{chap:simulations}, as achieving good results with deterministic protocols can often be more challenging compared to randomized ones. Additionally, this protocol is considered an \textit{anytime} protocol. We could therefore stop the simulation at any time, regardless of the initial state of the network, and the state of the network would not worsen at any step of the simulation. The protocol is designed to produce a "load state with discrepancy at most $\epsilon$ on $G$," where $\epsilon$ represents an arbitrarily small bound on the final discrepancy \cite{dinitz2022localDealAgreementloadBalancing}. The \textit{discrepancy} is the difference between the maximum load and the minimum load of the network. As initial information this protocol takes in a undirected graph $G$ with all the nodes, edges (interconnection of the nodes) and their respective loads.
 
-\section{Push-Pull-Sum Algorithm}
-The Push-Sum protocol, as proposed in the paper by Kempe et al. \cite{kempe2003gossipbasedComp}, is a load balancing protocol where each node selects a random neighbor and transfers half of its current sum and weight to that neighbor. The Push-Pull-Sum protocol is composed of the Push-Sum and the Pull-Sum protocol. Upon a push action the calling node ("caller") sends a pull request to the called node (the "callee"), which results in the callee to send its sum and weight divided by the number of pull requests to the caller and to itself \cite{nugroho2023PushPullSumDataAg}.
+\section{Push-Pull-Sum Protocol}
+The Push-Sum protocol, as proposed in the paper by Kempe et al. \cite{kempe2003gossipbasedComp}, is a load balancing protocol where each node selects a random neighbor and transfers half of its current sum and weight to that neighbor. The Push-Pull-Sum protocol is composed of the Push-Sum and the Pull-Sum protocol. Upon a push action the calling node (the "caller") sends a pull request to the called node (the "callee"), which results in the callee to send its sum and weight divided by the number of pull requests to the caller and to itself \cite{nugroho2023PushPullSumDataAg}.
 
-Consequently, a push operation of round $r$ is a load transfer of the caller to the callee of $\left(\frac{s_{r}}{2}, \frac{2_{r}}{2}\right)$ and itself. And a pull operation is a load transfer of the callee to the callers of values $\left(\frac{\frac{s_{r}}{2}}{|R|}, \frac{\frac{w_{r}}{2}}{|R|}\right)$ to each caller and itself.
+Consequently, a push operation of round $r$ is a load transfer of the caller to the callee of $\left(\frac{s_{r}}{2}, \frac{w_{r}}{2}\right)$ and itself. And a pull operation is a load transfer of the callee to the callers of values $\left(\frac{\frac{s_{r}}{2}}{|R|}, \frac{\frac{w_{r}}{2}}{|R|}\right)$ to each caller and itself.
 
-The implementation of the Push-Pull Sum algorithm is subdivided into three procedures:
+The implementation of the Push-Pull Sum protocol is subdivided into three procedures:
 \begin{itemize}
-    \item \textbf{aggregate}: In this procedure every node counts the number of ingoing messages, sent by their neighbors to them. The messages sent to a node are aggregated. Following that, the node calculate its sum and weight and computes the average $f_{avg} = \frac{s_{u, r}}{w_{u, r}}$.
-    \item \textbf{requestData}: After aggregating the data, each node randomly selects a neighbor and executes a push operation to this neighbor and to itself.
-    \item \textbf{responseData}: In this procedure, each node accumulates all pull requests received during the round into a set $R_{u, r}$. For every request in this set, a pull operation is executed, sending the node's sum and weight to the requesting nodes and updating the node's own values.
+    \item \textbf{Aggregate}: In this procedure every node counts the number of ingoing messages, sent by their neighbors to them. The messages sent to a node are aggregated. Following that, the node calculate its sum and weight and computes the average $f_{avg} = \frac{s_{u, r}}{w_{u, r}}$.
+    \item \textbf{RequestData}: After aggregating the data, each node randomly selects a neighbor and executes a push operation to this neighbor and to itself.
+    \item \textbf{ResponseData}: In this procedure, each node accumulates all pull requests received during the round into a set $R_{u, r}$. For every request in this set, a pull operation is executed, sending the node's sum and weight to the requesting nodes and updating the node's own values.
 \end{itemize}
-In the beginning of every round (except the first round - since there is nothing to aggreagate) the aggregate procedure is called. Following that the \textit{requestData} procedure is called. Finally, at the end of each round the responseData is called. We can observe that the sum of all weights at any round is equal to the networksize. Unlike the Deal-Agreement-Based protocol, the Push-Pull-Sum protocol is no deterministic algorithm, but a randomized algorithm.
+In the beginning of every round (except the first round - since there is nothing to aggreagate) the \textit{aggregate} procedure is called. Following that the \textit{RequestData} procedure is called. Finally, at the end of each round the \textit{responseData} is called. We can observe that the sum of all weights at any round is equal to the networksize. Unlike the Deal-Agreement-Based protocol, the Push-Pull-Sum protocol is no deterministic protocol, but a randomized protocol.
